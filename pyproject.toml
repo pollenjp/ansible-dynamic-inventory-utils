@@ -1,0 +1,97 @@
+[project]
+name = "ansible-dynamic-inventory-utils"
+description = "Add your description here"
+readme = "README.md"
+authors = [{ name = "pollenjp", email = "polleninjp@gmail.com" }]
+requires-python = ">=3.12"
+dependencies = ["pydantic>=2.10.1"]
+dynamic = ["version"]
+
+[dependency-groups]
+dev = ["pyright>=1.1.389", "ruff>=0.8.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ansible_dynamic_inventory_utils"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/*"]
+exclude = []
+
+[tool.hatch.version]
+path = "src/ansible_dynamic_inventory_utils/__about__.py"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 160
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 80
+
+[tool.ruff.lint]
+select = [
+    "A",
+    "ARG",
+    "B",
+    "C",
+    "DTZ",
+    "E",
+    "EM",
+    "F",
+    "FBT",
+    "I",
+    "ICN",
+    "ISC",
+    "N",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "Q",
+    "RUF",
+    "S",
+    "T",
+    "TID",
+    "UP",
+    "W",
+    "YTT",
+]
+ignore = ["ISC001"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests can use magic values, assertions, and relative imports
+"tests/**/*" = ["PLR2004", "S101", "TID252"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+known-first-party = ["ansible_dynamic_inventory_utils"]
+force-single-line = true
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"
+# https://github.com/microsoft/pyright/blob/main/docs/configuration.md#diagnostic-settings-defaults
+# Turn off
+reportMissingTypeStubs = "none"
+# reportUntypedFunctionDecorator = "error"
+# Turn on
+deprecateTypingAliases = true
+reportCallInDefaultInitializer = "error"
+reportImplicitOverride = "error"
+reportImplicitStringConcatenation = "error"
+reportImportCycles = "error"
+reportMissingSuperCall = "error"
+reportPropertyTypeMismatch = "error"
+reportShadowedImports = "error"
+reportUninitializedInstanceVariable = "error"
+reportUnnecessaryTypeIgnoreComment = "error"
+# reportUnusedCallResult = "error"
+
+[tool.pytest]
+testpaths = "tests"
