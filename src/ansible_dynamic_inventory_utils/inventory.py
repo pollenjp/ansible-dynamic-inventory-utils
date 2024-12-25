@@ -78,13 +78,13 @@ class Meta(BaseModel):
 
 
 def make_dynamic_inventory_list(inventory: Inventory) -> dict[str, t.Any]:
-    def _insert_group(ret_groups: dict[str, t.Any], ret_hostvars: dict[HostNameType, VarsBaseModel], group_name: str, group: InventoryGroupModel) -> None:
+    def insert_group_(ret_groups: dict[str, t.Any], ret_hostvars: dict[HostNameType, VarsBaseModel], group_name: str, group: InventoryGroupModel) -> None:
         for h_name, h_vars in group.hosts.items():
             # FIXME:
             ret_hostvars[h_name] |= h_vars
 
         for g_name, g in group.children.items():
-            _insert_group(ret_groups=ret_groups, ret_hostvars=ret_hostvars, group_name=g_name, group=g)
+            insert_group_(ret_groups=ret_groups, ret_hostvars=ret_hostvars, group_name=g_name, group=g)
 
         if group_name not in ret_groups:
             ret_groups[group_name] = GroupModel()
@@ -104,6 +104,6 @@ def make_dynamic_inventory_list(inventory: Inventory) -> dict[str, t.Any]:
 
     hostvars: dict[HostNameType, VarsBaseModel] = inventory.all.hosts
     for group_name, group in inventory.all.children.items():
-        _insert_group(_ret, hostvars, group_name, group)
+        insert_group_(_ret, hostvars, group_name, group)
     _ret["_meta"] = Meta(hostvars=hostvars)
     return {name: model.model_dump(exclude_none=True) for name, model in _ret.items()}
